@@ -4,6 +4,8 @@ A clean, modern SDDM login screen with custom wallpaper and avatar.
 
 ![Preview](preview.jpg)
 
+![Preview](preview2.png)
+
 ---
 
 ## 🚀 Install
