@@ -154,8 +154,6 @@ sudo cp -r \
     "$SCRIPT_DIR/Main.qml" \
     "$SCRIPT_DIR/metadata.desktop" \
     "$SCRIPT_DIR/theme.conf" \
-    "$SCRIPT_DIR/theme.conf.template" \
-    "$SCRIPT_DIR/caelestia-sddm.qmlproject" \
     "$SCRIPT_DIR/assets" \
     "$SCRIPT_DIR/components" \
     "$SCRIPT_DIR/config" \
