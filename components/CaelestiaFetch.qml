@@ -1,4 +1,4 @@
-import "../components"
+import "."
 import QtQuick
 import QtQuick.Layouts
 

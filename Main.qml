@@ -5,7 +5,6 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Window
 import "components"
-import "widgets"
 
 Rectangle {
     id: root
