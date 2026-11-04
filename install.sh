@@ -17,7 +17,7 @@ show_help() {
 Caelestia SDDM Installer
 
 Usage:
-  ./install [options]
+  ./install.sh [options]
 
 Options:
   -p, --preview          Preview theme in test window without installing
@@ -25,6 +25,20 @@ Options:
   --no-deps              Skip installing package manager dependencies & fonts
   -h, --help             Show this help message
 EOF
+    exit 0
+}
+
+do_uninstall() {
+    echo "=================================================="
+    echo "          Caelestia SDDM Uninstaller"
+    echo "=================================================="
+    sudo -v || exit 1
+    echo "Removing SDDM theme and configuration..."
+    sudo rm -rf "/var/lib/sddm/.cache/sddm-greeter-qt6" "$HOME/.cache/sddm-greeter-qt6"
+    sudo rm -rf "$INSTALL_DIR"
+    sudo rm -f "$CONFIG_DROPIN"
+    rm -f "$HOME/.config/caelestia/templates/sddm-theme.conf"
+    echo "✅ Caelestia SDDM cleanly uninstalled."
     exit 0
 }
 
@@ -37,7 +51,7 @@ while [[ $# -gt 0 ]]; do
             exec "$SCRIPT_DIR/preview.sh"
             ;;
         -u|--uninstall)
-            exec "$SCRIPT_DIR/uninstall.sh"
+            do_uninstall
             ;;
         --no-deps)
             SKIP_DEPS=true

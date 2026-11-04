@@ -10,7 +10,7 @@ A clean, modern, and lightweight SDDM login screen theme with custom wallpaper a
 
 - **Modern Aesthetic:** Clean lockscreen layout with date, clock, greeting, and system power controls.
 - **Custom Wallpaper & Avatar:** Pre-configured with custom high-resolution background and profile picture.
-- **Lightweight & Fast:** Pure Qt6 QML with optimized assets, fast startup, and zero unnecessary background processes.
+- **Lightweight & Fast:** Pure Qt6 QML with optimized assets, fast startup, and zero background overhead.
 - **One-Command Setup:** Automated installer handles dependencies, SDDM configuration, permissions, and greeter caching.
 
 ---
@@ -26,7 +26,7 @@ cd caelestia-sddm
 
 ### 2. Run the Installer
 ```bash
-./install
+./install.sh
 ```
 
 The installer will:
@@ -43,7 +43,7 @@ The installer will:
 You can safely test the theme in a preview window anytime without logging out:
 
 ```bash
-./preview
+./preview.sh
 ```
 
 ---
@@ -54,7 +54,7 @@ You can safely test the theme in a preview window anytime without logging out:
 - **User Avatar:** Replace `assets/avatar.jpg` with your profile photo.
 - **Colors & Options:** Edit `theme.conf` to tweak clocks, blur, or colors.
 
-After changing assets, simply run `./install` again to update your login screen.
+After changing assets, simply run `./install.sh` again to update your login screen.
 
 ---
 
@@ -63,7 +63,7 @@ After changing assets, simply run `./install` again to update your login screen.
 To remove the theme and restore your previous SDDM configuration:
 
 ```bash
-./uninstall
+./install.sh --uninstall
 ```
 
 ---
