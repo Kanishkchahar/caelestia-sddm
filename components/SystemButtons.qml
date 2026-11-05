@@ -16,9 +16,10 @@ Item {
 
         anchors.left: parent.left
         anchors.top: parent.top
-        height: parent.rectHeight
-        width: parent.rectWidth
-        radius: parent.rectRadius
+        height: root.rectHeight
+        width: root.rectWidth
+        radius: root.rectRadius
+        bottomLeftRadius: root.rectBigRadius
         color: config.subComponents
         clip: true
 
@@ -27,13 +28,10 @@ Item {
 
             property bool hovered: false
 
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 50
-            anchors.topMargin: 35
+            anchors.centerIn: parent
             text: "\ue8ac"
             color: config.secondary
-            pointSize: 70
+            pointSize: 48
         }
 
         LayerState {
@@ -67,13 +65,10 @@ Item {
         MaterialIcon {
             id: restartIcon
 
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 47
-            anchors.topMargin: 35
+            anchors.centerIn: parent
             text: "\ue863"
             color: config.secondary
-            pointSize: 70
+            pointSize: 48
         }
 
         LayerState {

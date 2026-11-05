@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import "."
 import QtQuick
 import QtQuick.Layouts
@@ -14,142 +15,117 @@ Item {
     property string host: config.host || "localhost"
     property string session: (root.currentSession || "Hyprland").split(" ")[0]
 
-    RowLayout {
-        Rectangle {
-            width: 33
-            height: 35
-            radius: 13
-            Layout.leftMargin: 23
-            Layout.topMargin: 25
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 25
+        spacing: 10
+
+        // Title Bar
+        RowLayout {
+            spacing: 12
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            color: config.secondary
+
+            Rectangle {
+                width: 32
+                height: 32
+                radius: 10
+                color: config.secondary
+
+                Text {
+                    renderType: Text.NativeRendering
+                    anchors.centerIn: parent
+                    color: "#111111"
+                    text: ">"
+                    font.family: "CaskaydiaCove NF"
+                    font.pointSize: 14
+                    font.bold: true
+                }
+            }
 
             Text {
                 renderType: Text.NativeRendering
-                anchors.centerIn: parent
-                color: "#111111"
-                text: ">"
+                color: config.text
+                text: "caelestiafetch.sh"
                 font.family: "CaskaydiaCove NF"
-                font.pointSize: 15
+                font.pointSize: 13
+                Layout.alignment: Qt.AlignVCenter
             }
         }
 
-        Text {
-            renderType: Text.NativeRendering
-            color: config.text
-            text: "caelestiafetch.sh"
-            font.family: "CaskaydiaCove NF"
-            font.pointSize: 13
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.topMargin: 32
-            Layout.leftMargin: 8
-        }
-    }
-
-    ColumnLayout {
         Item {
-            width: 30
-            height: 30
+            Layout.fillHeight: true
         }
 
+        // Logo & Specs
         RowLayout {
-            Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
+            spacing: 18
 
             Logo {
                 skipIntroAnimation: root.firstInput
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.leftMargin: 25
-                Layout.topMargin: 50
-                Layout.preferredWidth: 130
-                Layout.preferredHeight: 130
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: 125
+                Layout.preferredHeight: 125
             }
 
             RowLayout {
-                spacing: 10
+                spacing: 8
+                Layout.alignment: Qt.AlignVCenter
 
                 Text {
                     renderType: Text.NativeRendering
-                    Layout.leftMargin: 12
-                    Layout.topMargin: root.rectHeight / 10
                     text: "WM     :\nUSER   :\nOS     :\nHOST   :"
                     color: config.text
-                    font.pixelSize: 18
+                    font.pixelSize: 17
                     font.family: "CaskaydiaCove NF"
-                    lineHeight: 30
+                    lineHeight: 28
                     lineHeightMode: Text.FixedHeight
-                    Layout.preferredWidth: 80
                 }
 
                 Text {
                     renderType: Text.NativeRendering
-                    Layout.leftMargin: 0
-                    Layout.topMargin: root.rectHeight / 10
                     text: root.session + "\n" + root.currentUser + "\n" + root.os + "\n" + root.host
                     color: config.text
-                    font.pixelSize: 18
+                    font.pixelSize: 17
                     font.family: "CaskaydiaCove NF"
-                    lineHeight: 30
+                    lineHeight: 28
                     lineHeightMode: Text.FixedHeight
-                    Layout.preferredWidth: 100
                 }
             }
         }
 
+        Item {
+            Layout.fillHeight: true
+        }
+
+        // Color Dots
         RowLayout {
-            spacing: 20
             Layout.alignment: Qt.AlignHCenter
-            Layout.leftMargin: 30
-            Layout.topMargin: 4
+            spacing: 12
 
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.background
-                radius: 12
-            }
+            Repeater {
+                model: [
+                    config.background,
+                    config.primary,
+                    config.text,
+                    config.textDark,
+                    config.secondary,
+                    config.onSuccess,
+                    config.inverseOnSurface
+                ]
 
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.primary
-                radius: 12
+                Rectangle {
+                    required property color modelData
+                    width: 26
+                    height: 26
+                    color: modelData
+                    radius: 9
+                }
             }
+        }
 
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.text
-                radius: 12
-            }
-
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.textDark
-                radius: 12
-            }
-
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.secondary
-                radius: 12
-            }
-
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.onSuccess
-                radius: 12
-            }
-
-            Rectangle {
-                width: 30
-                height: 30
-                color: config.inverseOnSurface
-                radius: 12
-            }
+        Item {
+            height: 10
         }
     }
 }

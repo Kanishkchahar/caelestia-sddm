@@ -14,7 +14,6 @@ CONFIG_DROPIN="/etc/sddm.conf.d/caelestia.conf"
 # ── Defaults ──────────────────────────────────────────────
 DEFAULT_WALLPAPER="$SCRIPT_DIR/assets/background.jpg"
 DEFAULT_AVATAR="$SCRIPT_DIR/assets/avatar.jpg"
-DEFAULT_DISPLAY_NAME="Kanishk"
 
 # ── Help ──────────────────────────────────────────────────
 show_help() {
@@ -25,7 +24,8 @@ Usage:
   ./install.sh [command]
 
 Commands:
-  (none)        Interactive setup — choose display name, wallpaper, and avatar
+  (none)        Interactive setup — choose wallpaper and avatar
+  update        Quickly update installed theme files without changing wallpaper/avatar
   preview       Preview theme in a test window without installing
   uninstall     Remove theme from system and restore previous SDDM config
 
@@ -68,8 +68,46 @@ do_uninstall() {
     exit 0
 }
 
+# ── Update / Apply ────────────────────────────────────────
+do_update() {
+    echo "=================================================="
+    echo "         Updating Caelestia SDDM Theme"
+    echo "=================================================="
+    if ! sudo -v; then echo "✗ Sudo failed."; exit 1; fi
+
+    sudo mkdir -p "$INSTALL_DIR"
+    sudo cp -r \
+        "$SCRIPT_DIR/Main.qml" \
+        "$SCRIPT_DIR/metadata.desktop" \
+        "$SCRIPT_DIR/theme.conf" \
+        "$SCRIPT_DIR/assets" \
+        "$SCRIPT_DIR/components" \
+        "$SCRIPT_DIR/config" \
+        "$SCRIPT_DIR/scripts" \
+        "$INSTALL_DIR/"
+
+    sudo rm -f "$INSTALL_DIR/components/Greeting.qml" "$INSTALL_DIR/components/WelcomeText.qml"
+    [ -f "$SCRIPT_DIR/assets/avatar.jpg" ] && sudo cp "$SCRIPT_DIR/assets/avatar.jpg" "$INSTALL_DIR/assets/avatar.face.icon"
+    [ -f "$SCRIPT_DIR/assets/avatar.jpg" ] && sudo cp "$SCRIPT_DIR/assets/avatar.jpg" "$INSTALL_DIR/assets/avatar.face"
+
+    sudo find "$INSTALL_DIR" -type d -exec chmod 755 {} +
+    sudo find "$INSTALL_DIR" -type f -exec chmod 644 {} +
+    [ -f "$INSTALL_DIR/scripts/sync.sh" ] && sudo chmod 755 "$INSTALL_DIR/scripts/sync.sh"
+
+    sudo rm -rf /var/lib/sddm/.cache/sddm-greeter-qt6
+    rm -rf "$HOME/.cache/sddm-greeter-qt6"
+
+    if [ -x "$INSTALL_DIR/scripts/sync.sh" ]; then
+        sudo "$INSTALL_DIR/scripts/sync.sh" 2>/dev/null || true
+    fi
+
+    echo "✅ Theme files updated in $INSTALL_DIR!"
+    exit 0
+}
+
 # ── Parse command ─────────────────────────────────────────
 case "${1:-}" in
+    update|apply)   do_update ;;
     preview|-p)     do_preview ;;
     uninstall|-u)   do_uninstall ;;
     --help|-h)      show_help ;;
@@ -85,16 +123,7 @@ echo "          Caelestia SDDM Theme Setup"
 echo "=================================================="
 echo ""
 
-# ── 1. Display Name ──────────────────────────────────────
-echo "── Display Name ──"
-echo "This name appears in the greeting (e.g. 'Good morning, Kanishk')."
-echo "It also sets your Linux user's display name (GECOS field)."
-read -r -p "Display name [$DEFAULT_DISPLAY_NAME]: " DISPLAY_NAME
-DISPLAY_NAME="${DISPLAY_NAME:-$DEFAULT_DISPLAY_NAME}"
-echo "✓ Display name: $DISPLAY_NAME"
-echo ""
-
-# ── 2. Wallpaper ──────────────────────────────────────────
+# ── 1. Wallpaper ──────────────────────────────────────────
 echo "── Wallpaper ──"
 echo "Enter the full path to a wallpaper image, or press Enter for default."
 echo "Default: $DEFAULT_WALLPAPER"
@@ -124,7 +153,7 @@ else
 fi
 echo ""
 
-# ── 3. Profile Picture ───────────────────────────────────
+# ── 2. Profile Picture ───────────────────────────────────
 echo "── Profile Picture ──"
 echo "Enter the full path to a profile picture, or press Enter for default."
 echo "Default: $DEFAULT_AVATAR"
@@ -152,7 +181,6 @@ echo ""
 echo "=================================================="
 echo "  Summary"
 echo "=================================================="
-echo "  Display Name : $DISPLAY_NAME"
 echo "  Wallpaper    : $WALLPAPER_PATH"
 echo "  Avatar       : $AVATAR_PATH"
 echo "=================================================="
@@ -209,12 +237,6 @@ if ! pacman -Qi "ttf-rubik-vf" &>/dev/null && ! pacman -Qi "ttf-rubik" &>/dev/nu
         [[ -z "$YN" || "$YN" =~ ^[Yy]$ ]] && paru -S --noconfirm ttf-rubik-vf || true
     fi
 fi
-
-# ── Set Display Name ─────────────────────────────────────
-echo ""
-echo "── Setting Display Name ──"
-sudo chfn -f "$DISPLAY_NAME" "$(whoami)" 2>/dev/null || true
-echo "✓ Display name set to '$DISPLAY_NAME'"
 
 # ── Install Theme ────────────────────────────────────────
 echo ""
@@ -289,7 +311,6 @@ echo "=================================================="
 echo "  ✅ Caelestia SDDM Installed!"
 echo "=================================================="
 echo ""
-echo "  Display Name : $DISPLAY_NAME"
 echo "  Theme Active : $THEME_NAME"
 echo ""
 echo "  Preview:    ./install.sh preview"

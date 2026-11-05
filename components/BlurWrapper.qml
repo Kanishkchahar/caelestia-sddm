@@ -6,6 +6,8 @@ import QtQuick.Effects
 Item {
     id: blurCard
 
+    property real screenWidth: 1920
+    property real screenHeight: 1080
     property real targetWidth: 200
     property real targetHeight: 200
     property real startWidth: targetWidth / 10
@@ -49,8 +51,8 @@ Item {
             id: backgroundBlur
 
             anchors.centerIn: parent
-            width: 1920
-            height: 1080
+            width: blurCard.screenWidth
+            height: blurCard.screenHeight
             source: blurCard.source
             fillMode: Image.PreserveAspectCrop
             opacity: blurCard.visibleState ? 1 : 0

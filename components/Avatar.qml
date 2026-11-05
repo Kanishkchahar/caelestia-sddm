@@ -61,7 +61,7 @@ Item {
     Image {
         id: avatarImage
 
-        property var avatarCandidates: ["../assets/avatar.face.icon", "../assets/avatar.face", "../assets/avatar.jpg", "../assets/avatar.png"]
+        property var avatarCandidates: ["../assets/avatar.jpg", "../assets/avatar.png", "../assets/avatar.face.icon", "../assets/avatar.face"]
         property int avatarCandidateIndex: 0
 
         function loadNextAvatar() {

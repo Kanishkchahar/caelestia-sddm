@@ -14,10 +14,21 @@ Item {
             xhr.open("GET", Qt.resolvedUrl("../config/quotes.json"));
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    const data = JSON.parse(xhr.responseText);
-                    const index = Math.floor(Math.random() * data.length);
-                    quote.text = data[index].text;
-                    author.text = "~ " + data[index].author;
+                    try {
+                        if (xhr.responseText) {
+                            const data = JSON.parse(xhr.responseText);
+                            if (data && data.length > 0) {
+                                const index = Math.floor(Math.random() * data.length);
+                                quote.text = data[index].text;
+                                author.text = "~ " + data[index].author;
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        console.log("Quotes fallback used:", e);
+                    }
+                    quote.text = "What we think, we become.";
+                    author.text = "~ Buddha";
                 }
             };
             xhr.send();

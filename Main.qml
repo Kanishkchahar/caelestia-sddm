@@ -15,10 +15,16 @@ Rectangle {
         const shape = config.AvatarShape || "hexagon";
         return (shape !== "hexagon" && shape !== "circle") ? "hexagon" : shape;
     }
-    property bool welcomeMessageEnabled: config.enableWelcomeMessage !== "false"
-    property bool firstInput: welcomeMessageEnabled
+    property bool welcomeMessageEnabled: false
+    property bool firstInput: false
     property bool loading: false
     property string buffer
+    property real configScale: {
+        const val = parseFloat(config.cardScale);
+        return (!isNaN(val) && val > 0.5) ? val : 1.18;
+    }
+    property real baseScale: Math.min(root.width / 1920, root.height / 1080)
+    property real cardScale: baseScale * configScale
     property real welcomeBgBlurAmount: parseFloat(config.welcomeBgBlurAmount) || 1
     property bool welcomeBgBlur: config.welcomeBgBlur === "true"
     property real mainCardBlurAmount: parseFloat(config.mainCardBlurAmount) || 1
@@ -95,9 +101,6 @@ Rectangle {
         focus: true
         Keys.onPressed: function (event) {
             if (event.key === Qt.Key_Escape) {
-                if (root.welcomeMessageEnabled)
-                    root.firstInput = true;
-
                 root.buffer = "";
                 return;
             }
@@ -108,10 +111,6 @@ Rectangle {
             if (event.key === Qt.Key_Tab)
                 return;
 
-            if (root.firstInput) {
-                root.firstInput = false;
-                return;
-            }
             if (event.key === Qt.Key_Right) {
                 if (userPicker.currentIndex < userModel.count - 1)
                     userPicker.currentIndex += 1;
@@ -167,19 +166,6 @@ Rectangle {
         }
     }
 
-    Greeting {
-        anchors.centerIn: parent
-        firstInput: root.firstInput
-        mainCardRadius: root.midRadius
-        rootHeight: root.height
-        rootWidth: root.width
-        greetingText: greeting.welcomeString
-        username: userPicker.currentText
-        blurAmount: root.welcomeBgBlurAmount
-        blurEnabled: root.welcomeBgBlur
-        videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
-    }
-
     Rectangle {
         id: mainCard
 
@@ -196,14 +182,16 @@ Rectangle {
 
         width: 1350
         height: 750
-        scale: root.firstInput ? 0.5 : 1
-        opacity: root.firstInput ? 0 : 1
+        scale: root.cardScale
+        opacity: 1
         anchors.centerIn: parent
         radius: 70
         color: "transparent"
 
         BlurWrapper {
             anchors.centerIn: parent
+            screenWidth: root.width
+            screenHeight: root.height
             targetWidth: mainCard.width
             targetHeight: mainCard.height
             animDuration: 0
@@ -251,41 +239,18 @@ Rectangle {
                 Layout.alignment: Qt.AlignLeft
 
                 Rectangle {
-                    id: topLeftRect
-
-                    width: 390
-                    height: 220
-                    color: config.subComponents
-                    radius: root.midRadius
-                    opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
-                    clip: true
-
-                    WelcomeText {
-                        id: greeting
-
-                        anchors.centerIn: parent
-                        username: userPicker.currentText
-                    }
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 300
-                            easing.type: Easing.OutBack
-                        }
-                    }
-                }
-
-                Rectangle {
                     id: middleLeftRect
 
                     width: 390
                     Layout.fillHeight: true
                     color: config.subComponents
                     radius: mainCard.radius / 4
+                    topLeftRadius: root.midRadius
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
 
                     CaelestiaFetch {
+                        anchors.fill: parent
                         firstInput: root.firstInput
                         currentUser: userPicker.currentText
                         currentSession: sessionPickerBtn.currentText
@@ -379,8 +344,9 @@ Rectangle {
                     text: "Caps Lock is activated!"
                     font.pointSize: 8
                     font.family: "Roboto"
-                    color: config.text
-                    opacity: 0 // Its buggy rnm fix later
+                    color: config.secondary
+                    opacity: root.capsLockOn ? 1 : 0
+                    visible: opacity > 0
 
                     Behavior on opacity {
                         NumberAnimation {
