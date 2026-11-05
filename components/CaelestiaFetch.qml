@@ -30,11 +30,13 @@ Item {
                 height: 32
                 radius: 10
                 color: config.secondary
+                border.width: 1
+                border.color: "#25ffffff"
 
                 Text {
                     renderType: Text.NativeRendering
                     anchors.centerIn: parent
-                    color: "#111111"
+                    color: config.background
                     text: ">"
                     font.family: "CaskaydiaCove NF"
                     font.pointSize: 14
@@ -75,7 +77,7 @@ Item {
                 Text {
                     renderType: Text.NativeRendering
                     text: "WM     :\nUSER   :\nOS     :\nHOST   :"
-                    color: config.text
+                    color: config.secondary
                     font.pixelSize: 17
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 28
@@ -86,6 +88,7 @@ Item {
                     renderType: Text.NativeRendering
                     text: root.session + "\n" + root.currentUser + "\n" + root.os + "\n" + root.host
                     color: config.text
+                    font.bold: true
                     font.pixelSize: 17
                     font.family: "CaskaydiaCove NF"
                     lineHeight: 28
@@ -120,6 +123,8 @@ Item {
                     height: 26
                     color: modelData
                     radius: 9
+                    border.width: 1
+                    border.color: "#25ffffff"
                 }
             }
         }

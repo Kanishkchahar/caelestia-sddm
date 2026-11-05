@@ -65,7 +65,15 @@ Rectangle {
         radius: 30
         width: inputRect.buffer === "" ? 300 : 365
         height: 45
+        border.width: 1
+        border.color: inputRect.buffer !== "" ? config.secondary : "#25ffffff"
         opacity: inputRect.firstInput ? 0 : inputRect.mainCardComponentsOpacity
+
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 200
+            }
+        }
 
         Behavior on width {
             NumberAnimation {
@@ -85,10 +93,17 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 17
             font.family: "Material Symbols Rounded"
-            font.pointSize: 15
+            font.pointSize: 16
             text: "\ue897"
-            color: '#a8a8a8'
+            color: config.secondary
+            opacity: inputRect.buffer !== "" ? 1 : 0.7
             visible: !inputRect.isLoading
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
+                }
+            }
         }
 
         ShapeCanvas {
@@ -229,10 +244,10 @@ Rectangle {
                 renderType: Text.NativeRendering
                 anchors.centerIn: parent
                 font.pointSize: 12
-                text: inputRect.isLoading ? "Loading..." : "Enter your password"
-                color: '#6e6e6e'
+                text: inputRect.isLoading ? "Authenticating..." : "Enter your password"
+                color: config.secondary
+                opacity: inputRect.buffer === "" ? 0.75 : 0
                 font.family: "Rubik"
-                opacity: inputRect.buffer === "" ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -280,7 +295,7 @@ Rectangle {
                         preferredRendererType: Shape.CurveRenderer
 
                         ShapePath {
-                            fillColor: "white"
+                            fillColor: config.secondary
                             strokeColor: "transparent"
                             strokeWidth: 0
 

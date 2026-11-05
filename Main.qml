@@ -185,7 +185,9 @@ Rectangle {
         scale: root.cardScale
         opacity: 1
         anchors.centerIn: parent
-        radius: 70
+        radius: 60
+        border.width: 1
+        border.color: "#1affffff"
         color: "transparent"
 
         BlurWrapper {
@@ -198,7 +200,7 @@ Rectangle {
             blurAmount: root.mainCardBlurAmount
             bgColor: config.mainCard
             visibleState: !root.firstInput
-            radius: 50
+            radius: mainCard.radius
             videoSourceItem: videoLoader.item ? (videoLoader.item as VideoBackground).activeVideoItem : null
         }
 
@@ -222,11 +224,13 @@ Rectangle {
             anchors.top: mainCard.top
             anchors.topMargin: 270
             anchors.bottom: parent.bottom
-            color: config.text
-            text: mainCard.day + " • " + mainCard.date
-            font.pixelSize: 20
+            color: config.secondary
+            text: mainCard.day + "  •  " + mainCard.date
+            font.pixelSize: 18
+            font.letterSpacing: 2
             font.family: googleSansFlex.name
-            font.weight: Font.Bold
+            font.weight: Font.DemiBold
+            font.capitalization: Font.AllUppercase
         }
 
         RowLayout {
@@ -246,6 +250,8 @@ Rectangle {
                     color: config.subComponents
                     radius: mainCard.radius / 4
                     topLeftRadius: root.midRadius
+                    border.width: 1
+                    border.color: "#1affffff"
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
                     clip: true
 
@@ -372,6 +378,8 @@ Rectangle {
                     height: 355
                     color: config.subComponents
                     radius: root.smallRadius
+                    border.width: 1
+                    border.color: "#1affffff"
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     RandomQuote {
@@ -395,6 +403,8 @@ Rectangle {
                     color: config.subComponents
                     bottomRightRadius: mainCard.radius / 1.9
                     radius: mainCard.radius / 4
+                    border.width: 1
+                    border.color: "#1affffff"
                     opacity: root.firstInput ? 0 : root.mainCardComponentsOpacity
 
                     Image {
@@ -405,19 +415,25 @@ Rectangle {
                         source: "assets/dino.png"
                         anchors.centerIn: parent
                         fillMode: Image.PreserveAspectCrop
+                        smooth: true
+                        mipmap: true
+                        antialiasing: true
+                        opacity: 0.75
                         layer.enabled: true
 
                         layer.effect: ColorOverlay {
-                            color: config.inverseOnSurface
+                            color: config.secondary
                         }
                     }
 
                     Text {
                         renderType: Text.NativeRendering
                         text: "Unlock for notifications"
-                        color: config.inverseOnSurface
+                        color: config.secondary
+                        opacity: 0.85
                         font.family: "CaskaydiaCove NF"
                         font.pointSize: 12
+                        font.letterSpacing: 1.2
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 50

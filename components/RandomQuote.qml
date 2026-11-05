@@ -1,3 +1,4 @@
+import "."
 import QtQuick
 
 Item {
@@ -20,7 +21,7 @@ Item {
                             if (data && data.length > 0) {
                                 const index = Math.floor(Math.random() * data.length);
                                 quote.text = data[index].text;
-                                author.text = "~ " + data[index].author;
+                                author.text = "— " + data[index].author;
                                 return;
                             }
                         }
@@ -28,7 +29,7 @@ Item {
                         console.log("Quotes fallback used:", e);
                     }
                     quote.text = "What we think, we become.";
-                    author.text = "~ Buddha";
+                    author.text = "— Buddha";
                 }
             };
             xhr.send();
@@ -37,17 +38,27 @@ Item {
 
     Column {
         anchors.centerIn: parent
-        spacing: 30
+        spacing: 16
+
+        MaterialIcon {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "\ue244"
+            color: config.secondary
+            opacity: 0.65
+            pointSize: 28
+        }
 
         Text {
             id: quote
 
             width: 100
             text: ""
-            color: "white"
-            font.pointSize: 20
+            color: config.text
+            font.pointSize: 15
             font.family: "Rubik"
             font.italic: true
+            lineHeight: 1.35
+            lineHeightMode: Text.ProportionalHeight
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -58,10 +69,11 @@ Item {
 
             width: quote.width
             text: ""
-            color: config.primary
-            font.pointSize: 15
+            color: config.secondary
+            font.pointSize: 12
             font.family: "CaskaydiaCove NF"
             font.bold: true
+            font.letterSpacing: 1
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

@@ -3,6 +3,8 @@ import "shapes/morph.js" as Morph
 
 Canvas {
     id: root
+    antialiasing: true
+    smooth: true
     property color color: "#685496"
     property var roundedPolygon: null
     property bool polygonIsNormalized: true
@@ -52,6 +54,7 @@ Canvas {
 
     onPaint: {
         var ctx = getContext("2d");
+        ctx.imageSmoothingEnabled = true;
         ctx.fillStyle = root.color;
         ctx.clearRect(0, 0, width, height);
         if (!root.morph)
@@ -77,7 +80,7 @@ Canvas {
 
         if (root.borderWidth > 0) {
             ctx.strokeStyle = root.borderColor;
-            ctx.lineWidth = root.borderWidth;
+            ctx.lineWidth = root.polygonIsNormalized ? (root.borderWidth / size) : root.borderWidth;
             ctx.stroke();
         }
 

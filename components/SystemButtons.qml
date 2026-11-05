@@ -22,6 +22,8 @@ Item {
         bottomLeftRadius: root.rectBigRadius
         color: config.subComponents
         clip: true
+        border.width: 1
+        border.color: "#1affffff"
 
         MaterialIcon {
             id: powerIcon
@@ -61,6 +63,8 @@ Item {
         radius: root.rectRadius
         color: config.subComponents
         clip: true
+        border.width: 1
+        border.color: "#1affffff"
 
         MaterialIcon {
             id: restartIcon

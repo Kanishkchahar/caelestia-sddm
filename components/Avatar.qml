@@ -73,6 +73,7 @@ Item {
 
         mipmap: true
         smooth: true
+        antialiasing: true
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
@@ -93,5 +94,29 @@ Item {
         layer.effect: OpacityMask {
             maskSource: root.avatarShape === "circle" ? circleMask : hexMask
         }
+    }
+
+    // --- High-definition outline ring ---
+    Rectangle {
+        id: circleBorder
+        anchors.fill: parent
+        visible: root.avatarShape === "circle"
+        radius: Math.min(width, height) / 2
+        color: "transparent"
+        border.width: 3
+        border.color: "#30ffffff"
+        antialiasing: true
+        z: 5
+    }
+
+    ShapeCanvas {
+        id: hexBorder
+        anchors.fill: parent
+        visible: root.avatarShape === "hexagon"
+        roundedPolygon: root.shapeGetters[root.hexIndex]()
+        color: "transparent"
+        borderWidth: 3
+        borderColor: "#30ffffff"
+        z: 5
     }
 }
